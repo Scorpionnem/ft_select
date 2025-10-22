@@ -6,28 +6,26 @@
 /*   By: mbatty <mbatty@student.42angouleme.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 13:59:26 by mbatty            #+#    #+#             */
-/*   Updated: 2025/10/22 15:30:50 by mbatty           ###   ########.fr       */
+/*   Updated: 2025/10/22 16:49:08 by mbatty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ctx.h"
 
-t_item	*items_biggest(t_item *lst)
+void	items_free(t_item *lst)
 {
 	t_item	*first;
-	t_item	*biggest;
+	t_item	*tmp;
 
 	first = lst;
-	biggest = first;
 	while (lst != NULL)
 	{
-		if (ft_strlen(lst->data) > ft_strlen(biggest->data))
-			biggest = lst;
+		tmp = lst;
 		lst = lst->next;
+		free(tmp);
 		if (lst == first)
 			break ;
 	}
-	return (biggest);
 }
 
 t_item	*items_new(char *content)
@@ -47,7 +45,7 @@ t_item	*items_new(char *content)
 void	items_add_back(t_item **lst, t_item *new)
 {
 	t_item	*last;
-	
+
 	if (!lst || !new)
 		return ;
 	if (*lst)

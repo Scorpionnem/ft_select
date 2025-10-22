@@ -6,16 +6,16 @@
 /*   By: mbatty <mbatty@student.42angouleme.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 13:22:21 by mbatty            #+#    #+#             */
-/*   Updated: 2025/10/22 13:48:56 by mbatty           ###   ########.fr       */
+/*   Updated: 2025/10/22 16:43:01 by mbatty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ctx.h"
 
-t_input	read_input()
+t_input	read_input(void)
 {
-	char buf[8];
-	ssize_t n;
+	char	buf[8];
+	size_t	n;
 
 	n = read(STDIN_FILENO, buf, sizeof(buf));
 	if (n <= 0)
