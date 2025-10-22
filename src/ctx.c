@@ -6,7 +6,7 @@
 /*   By: mbatty <mbatty@student.42angouleme.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/28 02:55:45 by mbatty            #+#    #+#             */
-/*   Updated: 2025/10/22 16:49:55 by mbatty           ###   ########.fr       */
+/*   Updated: 2025/10/22 16:58:03 by mbatty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,5 +69,6 @@ int	ctx_init(t_ctx *ctx, int ac, char **av)
 	if (!ctx_update(ctx))
 		return (0);
 	hide_cursor(ctx);
+	ctx->cursor = ctx->items;
 	return (1);
 }

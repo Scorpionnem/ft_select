@@ -6,30 +6,29 @@
 /*   By: mbatty <mbatty@student.42angouleme.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/28 02:44:15 by mbatty            #+#    #+#             */
-/*   Updated: 2025/10/22 16:48:40 by mbatty           ###   ########.fr       */
+/*   Updated: 2025/10/22 17:18:35 by mbatty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ctx.h"
 #include "term_cmds.h"
 
-bool	g_running = true;
+int	g_running = 0;
 
-void	handle_sigint(int sig)
+static void	handle_signal(int sig)
 {
-	(void)sig;
-	g_running = false;
+	g_running = sig;
 }
 
-// signal(SIGSTOP, handle_sigint);
-// signal(SIGKILL, handle_sigint);
+//signal(SIGTSTP, handle_signal);
+//signal(SIGCONT, handle_signal);
 void	setup_signals(void)
 {
-	signal(SIGABRT, handle_sigint);
-	signal(SIGINT, handle_sigint);
-	signal(SIGCONT, handle_sigint);
-	signal(SIGTSTP, handle_sigint);
-	signal(SIGQUIT, handle_sigint);
+	signal(SIGABRT, handle_signal);
+	signal(SIGINT, handle_signal);
+	signal(SIGQUIT, handle_signal);
+	signal(SIGSTOP, handle_signal);
+	signal(SIGKILL, handle_signal);
 }
 
 void	check_input(t_ctx *ctx, t_input input)
@@ -57,7 +56,7 @@ void	loop(t_ctx *ctx)
 	t_input	input;
 
 	refresh_display(ctx);
-	while (g_running && ctx->running)
+	while (!g_running && ctx->running)
 	{
 		ctx_update(ctx);
 		input = read_input();
