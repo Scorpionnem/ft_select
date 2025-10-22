@@ -6,7 +6,7 @@
 /*   By: mbatty <mbatty@student.42angouleme.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/28 03:54:22 by mbatty            #+#    #+#             */
-/*   Updated: 2025/09/28 03:55:55 by mbatty           ###   ########.fr       */
+/*   Updated: 2025/10/04 10:34:56 by mbatty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,5 +14,5 @@
 
 int	ft_putchar(int c)
 {
-	return (write(1, &c, 1));
+	return (write(2, &c, 1));
 }

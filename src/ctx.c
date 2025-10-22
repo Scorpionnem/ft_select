@@ -6,7 +6,7 @@
 /*   By: mbatty <mbatty@student.42angouleme.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/28 02:55:45 by mbatty            #+#    #+#             */
-/*   Updated: 2025/09/28 05:37:12 by mbatty           ###   ########.fr       */
+/*   Updated: 2025/10/04 10:38:41 by mbatty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,19 +22,19 @@ static int	ctx_init_term(t_ctx *ctx)
 	termtype = getenv("TERM");
 	if (!termtype)
 	{
-		fprintf(stderr, "Specify a terminal type with `TERM` environment variable.\n");
+		dprintf(2, "Specify a terminal type with `TERM` environment variable.\n");
 		return (0);
 	}
 
 	success = tgetent(NULL, termtype);
 	if (success < 0)
 	{
-		fprintf(stderr, "Could not access the termcap database.\n");
+		dprintf(2, "Could not access the termcap database.\n");
 		return (0);
 	}
 	else if (success == 0)
 	{
-		fprintf(stderr, "Terminal type `%s` is not defined.\n", termtype);
+		dprintf(2, "Terminal type `%s` is not defined.\n", termtype);
 		return (0);
 	}
 	return (1);

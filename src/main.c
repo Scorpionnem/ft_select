@@ -6,7 +6,7 @@
 /*   By: mbatty <mbatty@student.42angouleme.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/28 02:44:15 by mbatty            #+#    #+#             */
-/*   Updated: 2025/09/28 05:48:18 by mbatty           ###   ########.fr       */
+/*   Updated: 2025/10/04 10:37:36 by mbatty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,12 +83,12 @@ void	refresh_display(t_ctx *ctx)
 		len = ft_strlen(ctx->items[i].data);
 		if (len > ctx->columns_count)
 			yoffset += (len / ctx->columns_count);
-		printf("%s\n", ctx->items[i].data);
+		dprintf(2, "%s\n", ctx->items[i].data);
 		reset_terminal(ctx);
 		i++;
 
 	}
-	printf("\n");
+	dprintf(2, "\n");
 }
 
 void	move_current(t_ctx *ctx, int dir)
@@ -111,10 +111,11 @@ void	print_selected(t_ctx *ctx)
 	while (i < ctx->items_count)
 	{
 		if (ctx->items[i].selected)
-			printf("%s ", ctx->items[i].data);
+			// printf("%s ", ctx->items[i].data);
+			dprintf(2, "%s ", ctx->items[i].data);
 		i++;
 	}
-	printf("\n");
+	dprintf(2, "\n");
 }
 
 void	parse_input(t_ctx *ctx, t_input input)
