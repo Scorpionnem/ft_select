@@ -6,7 +6,7 @@
 /*   By: mbatty <mbatty@student.42angouleme.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/28 02:55:45 by mbatty            #+#    #+#             */
-/*   Updated: 2025/10/04 10:38:41 by mbatty           ###   ########.fr       */
+/*   Updated: 2025/10/22 14:55:19 by mbatty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,34 +42,32 @@ static int	ctx_init_term(t_ctx *ctx)
 
 static int	ctx_get_term_commands(t_ctx *ctx)
 {
-	ctx->clear_cmd = tgetstr("cl", NULL);
-	ctx->text_color_cmd = tgetstr("AF", NULL);
-	ctx->text_bg_color_cmd = tgetstr("AB", NULL);
-	ctx->reset_cmd = tgetstr("me", NULL);
-	ctx->bold_cmd = tgetstr("md", NULL);
-	ctx->underline_cmd = tgetstr("us", NULL);
-	ctx->blink_cmd = tgetstr("mb", NULL);
+	ctx->cmds.clear_cmd = tgetstr("cl", NULL);
+	ctx->cmds.text_color_cmd = tgetstr("AF", NULL);
+	ctx->cmds.text_bg_color_cmd = tgetstr("AB", NULL);
+	ctx->cmds.reset_cmd = tgetstr("me", NULL);
+	ctx->cmds.bold_cmd = tgetstr("md", NULL);
+	ctx->cmds.underline_cmd = tgetstr("us", NULL);
+	ctx->cmds.blink_cmd = tgetstr("mb", NULL);
 
-	ctx->hide_cursor_cmd = tgetstr("vi", NULL);
-	ctx->show_cursor_cmd = tgetstr("ve", NULL);
-	ctx->cursor_motion = tgetstr("cm", NULL);
+	ctx->cmds.hide_cursor_cmd = tgetstr("vi", NULL);
+	ctx->cmds.show_cursor_cmd = tgetstr("ve", NULL);
+	ctx->cmds.cursor_motion = tgetstr("cm", NULL);
 	return (1);
 }
 
-void	refresh_display(t_ctx *ctx);
-
-int	ctx_get_term_settings(t_ctx *ctx)
+int	ctx_update(t_ctx *ctx)
 {
 	struct winsize w;
-	unsigned int	prev_col;
-	unsigned int	prev_row;
+	unsigned int	prev_width;
+	unsigned int	prev_height;
 	ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
 
-	prev_col = ctx->columns_count;
-	prev_row = ctx->lines_count;
+	prev_width = ctx->columns_count;
+	prev_height = ctx->lines_count;
 	ctx->columns_count = w.ws_col;
 	ctx->lines_count = w.ws_row;
-	if (prev_col != ctx->columns_count || prev_row != ctx->lines_count)
+	if (prev_height != ctx->lines_count || prev_width != ctx->columns_count)
 		refresh_display(ctx);
 	return (1);
 }
@@ -82,8 +80,8 @@ static int	ctx_set_canonical_temr(t_ctx *ctx)
 	if (tcgetattr(0, &ctx->s_termios_backup) == -1)
 		return (0);
 
-	ctx->s_termios.c_lflag &= ~(ICANON); //Sets canonical form (no need to enter to get inputs)
-	ctx->s_termios.c_lflag &= ~(ECHO); //No rendering of typed keys
+	ctx->s_termios.c_lflag &= ~(ICANON);
+	ctx->s_termios.c_lflag &= ~(ECHO);
 	ctx->s_termios.c_cc[VMIN] = 0;
 	ctx->s_termios.c_cc[VTIME] = 1;
 
@@ -103,25 +101,25 @@ int	delete_ctx(t_ctx *ctx)
 static int	ctx_fill_list(t_ctx *ctx, int ac, char **av)
 {
 	(void)ctx;
+	(void)ac;
+	(void)av;
 	int		i;
+	t_item	*new;
 
 	i = 0;
-	ac--;
-	av++;
-	ctx->items = malloc(sizeof(t_item) * ac);
-	ctx->items_count = ac;
-	while (i < ac)
+	while (av[i])
 	{
-		ctx->items[i].data = av[i];
-		ctx->items[i].selected = false;
+		new = items_new(av[i]);
+		items_add_back(&ctx->items, new);
 		i++;
 	}
-	ctx->current = 0;
+	ctx->cursor = ctx->items;
 	return (1);
 }
 
 int	ctx_init(t_ctx *ctx, int ac, char **av)
 {
+	ft_bzero(ctx, sizeof(t_ctx));
 	ctx->running = true;
 	if (!ctx_init_term(ctx))
 		return (0);
@@ -129,9 +127,9 @@ int	ctx_init(t_ctx *ctx, int ac, char **av)
 		return (0);
 	if (!ctx_get_term_commands(ctx))
 		return (0);
-	if (!ctx_fill_list(ctx, ac, av))
+	if (!ctx_fill_list(ctx, --ac, ++av))
 		return (0);
-	if (!ctx_get_term_settings(ctx))
+	if (!ctx_update(ctx))
 		return (0);
 	hide_cursor(ctx);
 	return (1);

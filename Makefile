@@ -8,7 +8,10 @@ INCLUDES =	-I ./includes/\
 
 SRCS =	src/main.c\
 		src/ctx.c\
-		src/term_cmds.c
+		src/term_cmds.c\
+		src/input.c\
+		src/error.c\
+		src/items.c
 
 OBJDIR = obj
 OBJS = $(SRCS:%.c=$(OBJDIR)/%.o)

@@ -6,7 +6,7 @@
 /*   By: mbatty <mbatty@student.42angouleme.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/28 02:44:15 by mbatty            #+#    #+#             */
-/*   Updated: 2025/10/04 10:37:36 by mbatty           ###   ########.fr       */
+/*   Updated: 2025/10/22 15:50:53 by mbatty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,147 +21,180 @@ void	handle_sigint(int sig)
 	g_running = false;
 }
 
-typedef enum e_input
+int	items_per_line(t_ctx *ctx)
 {
-	FT_KEY_ENTER,
-	FT_KEY_UP,
-	FT_KEY_DOWN,
-	FT_KEY_RIGHT,
-	FT_KEY_LEFT,
-	FT_KEY_ESCAPE,
-	FT_KEY_SPACE,
-	FT_KEY_DELETE,
-	FT_KEY_BACKSPACE,
-	FT_NO_INPUT
-} t_input;
+	return (ctx->columns_count / ft_strlen(items_biggest(ctx->items)->data));
+}
 
-t_input	read_input()
+void	print_items(t_ctx *ctx)
 {
-	char buf[8];
-	ssize_t n;
+	t_item	*first;
+	t_item	*lst;
+	int		written_count;
+	int		max_width;
 
-	n = read(STDIN_FILENO, buf, sizeof(buf));
-	if (n <= 0)
-		return (FT_NO_INPUT);
-	if (buf[0] == 10)
-		return (FT_KEY_ENTER);
-	else if (buf[0] == 27)
+	lst = ctx->items;
+	first = lst;
+	written_count = 0;
+	max_width = items_per_line(ctx);
+	while (lst != NULL)
 	{
-		if (n >= 4 && buf[1] == '[' && buf[2] == '3' && buf[3] == '~')
-			return (FT_KEY_DELETE);
-		if (n >= 3 && buf[1] == '[')
+		if (written_count >= max_width)
 		{
-			if (buf[2] >= 'A' && buf[2] <= 'D')
-				return (FT_KEY_UP + (buf[2] - 'A'));
+			written_count = 1;
+			dprintf(2, "\n");
 		}
-		else if (n == 1)
-			return (FT_KEY_ESCAPE);
+		else
+			written_count++;
+
+		if (ctx->cursor == lst)
+		{
+			set_underline(ctx);
+			set_bold(ctx);
+		}
+		if (lst->selected)
+		{
+			set_bg_color(ctx, COLOR_WHITE);
+			set_color(ctx, COLOR_BLACK);
+		}
+
+		dprintf(2, "%s ", lst->data);
+		reset_terminal(ctx);
+		
+		lst = lst->next;
+		if (lst == first)
+			break ;
 	}
-	else if (buf[0] == ' ')
-		return (FT_KEY_SPACE);
-	else if (buf[0] == 127 || buf[0] == 8)
-		return (FT_KEY_BACKSPACE);
-	return (FT_NO_INPUT);
+	dprintf(2, "\n");
 }
 
 void	refresh_display(t_ctx *ctx)
 {
-	int	i = 0;
-	int	yoffset;
-	unsigned int	len;
-
-	yoffset = 0;
 	clear_terminal(ctx);
-	while (i < ctx->items_count)
-	{
-		if (i == ctx->current)
-			set_underline(ctx);
-		if (ctx->items[i].selected)
-			set_bg_color(ctx, COLOR_RED);
-
-		set_cursor_pos(ctx, (ctx->columns_count / 2) - (ft_strlen(ctx->items[i].data) / 2), ((ctx->lines_count / 2) - (ctx->items_count) / 2) + i + yoffset);
-		len = ft_strlen(ctx->items[i].data);
-		if (len > ctx->columns_count)
-			yoffset += (len / ctx->columns_count);
-		dprintf(2, "%s\n", ctx->items[i].data);
-		reset_terminal(ctx);
-		i++;
-
-	}
-	dprintf(2, "\n");
+	print_items(ctx);
 }
 
-void	move_current(t_ctx *ctx, int dir)
+void	ctx_stop(t_ctx *ctx)
 {
-	ctx->current += dir;
+	clear_terminal(ctx);
+	ctx->running = false;
+}
 
-	if (ctx->current < 0)
-		ctx->current = ctx->items_count - 1;
-	if (ctx->current >= ctx->items_count)
-		ctx->current = 0;
+void	validate_selection(t_ctx *ctx)
+{
+	t_item	*first;
+	t_item	*lst;
 
+	ctx_stop(ctx);
+	lst = ctx->items;
+	first = lst;
+	while (lst != NULL)
+	{
+		if (lst->selected)
+			printf("%s ", lst->data);
+		lst = lst->next;
+		if (lst == first)
+			break ;
+	}
+	printf("\n");
+}
+
+void	move_left(t_ctx *ctx)
+{
+	if (ctx->cursor->previous)
+		ctx->cursor = ctx->cursor->previous;
 	refresh_display(ctx);
 }
 
-void	print_selected(t_ctx *ctx)
+void	move_right(t_ctx *ctx)
+{
+	if (ctx->cursor->next)
+		ctx->cursor = ctx->cursor->next;
+	refresh_display(ctx);
+}
+
+void	select_item(t_ctx *ctx)
+{
+	ctx->cursor->selected = !ctx->cursor->selected;
+	move_right(ctx);
+}
+
+void	move_up(t_ctx *ctx)
 {
 	int	i = 0;
 
-	clear_terminal(ctx);
-	while (i < ctx->items_count)
+	while (i < items_per_line(ctx))
 	{
-		if (ctx->items[i].selected)
-			// printf("%s ", ctx->items[i].data);
-			dprintf(2, "%s ", ctx->items[i].data);
+		move_left(ctx);
 		i++;
 	}
-	dprintf(2, "\n");
+	refresh_display(ctx);
 }
 
-void	parse_input(t_ctx *ctx, t_input input)
+void	move_down(t_ctx *ctx)
+{
+	int	i = 0;
+
+	while (i < items_per_line(ctx))
+	{
+		move_right(ctx);
+		i++;
+	}
+	refresh_display(ctx);
+}
+
+void	setup_signals()
+{
+	signal(SIGABRT, handle_sigint);
+	signal(SIGINT, handle_sigint);
+	// signal(SIGSTOP, handle_sigint);
+	signal(SIGCONT, handle_sigint);
+	signal(SIGTSTP, handle_sigint);
+	// signal(SIGKILL, handle_sigint);
+	signal(SIGQUIT, handle_sigint);
+}
+
+void	check_input(t_ctx *ctx, t_input input)
 {
 	if (input == FT_KEY_ESCAPE)
-		ctx->running = false;
-	if (input == FT_KEY_UP || input == FT_KEY_LEFT)
-		move_current(ctx, -1);
-	if (input == FT_KEY_DOWN || input == FT_KEY_RIGHT)
-		move_current(ctx, 1);
-	if (input == FT_KEY_SPACE)
+		ctx_stop(ctx);
+	else if (input == FT_KEY_LEFT)
+		move_left(ctx);
+	else if (input == FT_KEY_RIGHT)
+		move_right(ctx);
+	else if (input == FT_KEY_UP)
+		move_up(ctx);
+	else if (input == FT_KEY_DOWN)
+		move_down(ctx);
+	else if (input == FT_KEY_SPACE)
+		select_item(ctx);
+	else if (input == FT_KEY_ENTER)
+		validate_selection(ctx);
+}
+
+void	loop(t_ctx *ctx)
+{
+	t_input	input;
+
+	refresh_display(ctx);
+	while (g_running && ctx->running)
 	{
-		ctx->items[ctx->current].selected = !ctx->items[ctx->current].selected;
-		move_current(ctx, 1);
-	}
-	if (input == FT_KEY_ENTER)
-	{
-		print_selected(ctx);
-		ctx->running = false;
+		ctx_update(ctx);
+		
+		input = read_input();
+		check_input(ctx, input);
 	}
 }
 
 int	main(int ac, char **av)
 {
 	t_ctx	ctx;
-	t_input	input;
 
 	if (ac < 2)
-	{
-		ft_putendl_fd("Error\nNot enough arguments", 2);
-		return (1);
-	}
-	
-	signal(SIGINT, handle_sigint);
-	
+		return (!error("Error\nNot enough arguments"));
 	if (!ctx_init(&ctx, ac, av))
 		return (1);
-
-	refresh_display(&ctx);
-	while (g_running && ctx.running)
-	{
-		ctx_get_term_settings(&ctx);
-		
-		input = read_input();
-		parse_input(&ctx, input);
-	}
-
+	setup_signals();
+	loop(&ctx);
 	return (delete_ctx(&ctx));
 }
