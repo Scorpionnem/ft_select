@@ -6,7 +6,7 @@
 /*   By: mbatty <mbatty@student.42angouleme.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/28 02:44:15 by mbatty            #+#    #+#             */
-/*   Updated: 2025/10/23 09:07:49 by mbatty           ###   ########.fr       */
+/*   Updated: 2025/10/23 09:16:48 by mbatty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,12 @@ static void	handle_signal(int sig)
 
 static void	handle_signalstp(int sig)
 {
-	(void)sig;
+	sig = 0;
 	tcsetattr(g_ctx.term_fd, TCSANOW, &g_ctx.s_termios_backup);
-	signal(SIGTSTP, SIG_DFL);
 	show_cursor(&g_ctx);
+	while (sig < 10000000)
+		sig++;
+	signal(SIGTSTP, SIG_DFL);
 	ioctl(g_ctx.term_fd, TIOCSTI, "\x1A");
 }
 
