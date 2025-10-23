@@ -6,7 +6,7 @@
 /*   By: mbatty <mbatty@student.42angouleme.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/28 02:44:38 by mbatty            #+#    #+#             */
-/*   Updated: 2025/10/22 16:45:10 by mbatty           ###   ########.fr       */
+/*   Updated: 2025/10/23 08:51:11 by mbatty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include <curses.h>
 # include <signal.h>
 # include <sys/ioctl.h>
+# include <fcntl.h>
 
 # include "libft.h"
 

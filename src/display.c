@@ -6,7 +6,7 @@
 /*   By: mbatty <mbatty@student.42angouleme.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 16:33:55 by mbatty            #+#    #+#             */
-/*   Updated: 2025/10/22 16:41:01 by mbatty           ###   ########.fr       */
+/*   Updated: 2025/10/23 08:38:56 by mbatty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ static void	print_item(t_ctx *ctx, t_item *lst, t_item *cursor)
 		set_color(ctx, COLOR_BLACK);
 	}
 	ft_putstr_fd(lst->data, 2);
+	reset_terminal(ctx);
 	ft_putchar_fd(' ', 2);
 }
 
@@ -50,7 +51,6 @@ static void	print_items(t_ctx *ctx)
 		else
 			written_count++;
 		print_item(ctx, lst, ctx->cursor);
-		reset_terminal(ctx);
 		lst = lst->next;
 		if (lst == first)
 			break ;

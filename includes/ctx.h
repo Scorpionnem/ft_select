@@ -6,7 +6,7 @@
 /*   By: mbatty <mbatty@student.42angouleme.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/28 02:54:55 by mbatty            #+#    #+#             */
-/*   Updated: 2025/10/22 16:50:49 by mbatty           ###   ########.fr       */
+/*   Updated: 2025/10/23 08:50:44 by mbatty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,8 @@ typedef struct s_cmds
 
 typedef struct s_ctx
 {
+	int				term_fd;
+	
 	unsigned int	lines_count;
 	unsigned int	columns_count;
 
@@ -101,6 +103,6 @@ void	delete_item(t_ctx *ctx);
 void	select_item(t_ctx *ctx);
 
 int		ctx_get_term_commands(t_ctx *ctx);
-int		ctx_init_term(void);
+int		ctx_init_term(t_ctx *ctx);
 
 #endif

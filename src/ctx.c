@@ -6,7 +6,7 @@
 /*   By: mbatty <mbatty@student.42angouleme.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/28 02:55:45 by mbatty            #+#    #+#             */
-/*   Updated: 2025/10/22 16:58:03 by mbatty           ###   ########.fr       */
+/*   Updated: 2025/10/23 08:52:29 by mbatty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,14 @@ static int	ctx_set_canonical_term(t_ctx *ctx)
 	ctx->s_termios.c_lflag &= ~(ECHO);
 	ctx->s_termios.c_cc[VMIN] = 0;
 	ctx->s_termios.c_cc[VTIME] = 1;
-	if (tcsetattr(STDIN_FILENO, TCSANOW, &ctx->s_termios) == -1)
+	if (tcsetattr(ctx->term_fd, TCSANOW, &ctx->s_termios) == -1)
 		return (0);
 	return (1);
 }
 
 int	delete_ctx(t_ctx *ctx)
 {
-	if (tcsetattr(STDIN_FILENO, TCSANOW, &ctx->s_termios_backup) == -1)
+	if (tcsetattr(ctx->term_fd, TCSANOW, &ctx->s_termios_backup) == -1)
 		return (1);
 	show_cursor(ctx);
 	items_free(ctx->items);
@@ -58,7 +58,7 @@ int	ctx_init(t_ctx *ctx, int ac, char **av)
 	ac = 42;
 	ft_bzero(ctx, sizeof(t_ctx));
 	ctx->running = true;
-	if (!ctx_init_term())
+	if (!ctx_init_term(ctx))
 		return (0);
 	if (!ctx_set_canonical_term(ctx))
 		return (0);
