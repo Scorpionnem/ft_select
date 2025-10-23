@@ -6,7 +6,7 @@
 /*   By: mbatty <mbatty@student.42angouleme.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/28 02:55:45 by mbatty            #+#    #+#             */
-/*   Updated: 2025/10/23 08:52:29 by mbatty           ###   ########.fr       */
+/*   Updated: 2025/10/23 12:59:40 by mbatty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,11 @@ static int	ctx_fill_list(t_ctx *ctx, char **av)
 	while (av[i])
 	{
 		new = items_new(av[i]);
+		if (!new)
+		{
+			items_free(ctx->items);
+			return (0);
+		}
 		items_add_back(&ctx->items, new);
 		i++;
 	}
@@ -66,8 +71,7 @@ int	ctx_init(t_ctx *ctx, int ac, char **av)
 		return (0);
 	if (!ctx_fill_list(ctx, ++av))
 		return (0);
-	if (!ctx_update(ctx))
-		return (0);
+	ctx_update(ctx);
 	hide_cursor(ctx);
 	ctx->cursor = ctx->items;
 	return (1);

@@ -6,7 +6,7 @@
 /*   By: mbatty <mbatty@student.42angouleme.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 13:22:21 by mbatty            #+#    #+#             */
-/*   Updated: 2025/10/22 16:43:01 by mbatty           ###   ########.fr       */
+/*   Updated: 2025/10/23 13:00:42 by mbatty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,8 @@ t_input	read_input(void)
 	{
 		if (n >= 4 && buf[1] == '[' && buf[2] == '3' && buf[3] == '~')
 			return (FT_KEY_DELETE);
-		if (n >= 3 && buf[1] == '[')
-		{
-			if (buf[2] >= 'A' && buf[2] <= 'D')
-				return (FT_KEY_UP + (buf[2] - 'A'));
-		}
+		if (n >= 3 && buf[1] == '[' && buf[2] >= 'A' && buf[2] <= 'D')
+			return (FT_KEY_UP + (buf[2] - 'A'));
 		else if (n == 1)
 			return (FT_KEY_ESCAPE);
 	}

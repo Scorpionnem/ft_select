@@ -6,7 +6,7 @@
 /*   By: mbatty <mbatty@student.42angouleme.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/28 02:44:15 by mbatty            #+#    #+#             */
-/*   Updated: 2025/10/23 09:16:48 by mbatty           ###   ########.fr       */
+/*   Updated: 2025/10/23 13:01:41 by mbatty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static void	handle_signalstp(int sig)
 	sig = 0;
 	tcsetattr(g_ctx.term_fd, TCSANOW, &g_ctx.s_termios_backup);
 	show_cursor(&g_ctx);
-	while (sig < 10000000)
+	while (sig < 1000000)
 		sig++;
 	signal(SIGTSTP, SIG_DFL);
 	ioctl(g_ctx.term_fd, TIOCSTI, "\x1A");

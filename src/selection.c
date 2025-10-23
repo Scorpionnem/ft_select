@@ -6,7 +6,7 @@
 /*   By: mbatty <mbatty@student.42angouleme.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 16:47:48 by mbatty            #+#    #+#             */
-/*   Updated: 2025/10/22 17:00:07 by mbatty           ###   ########.fr       */
+/*   Updated: 2025/10/23 13:04:34 by mbatty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,8 @@ void	validate_selection(t_ctx *ctx)
 		if (lst->selected)
 		{
 			ft_putstr_fd(lst->data, 1);
-			ft_putchar_fd(' ', 1);
+			if (lst->next != first)
+				ft_putchar_fd(' ', 1);
 			selected++;
 		}
 		lst = lst->next;
