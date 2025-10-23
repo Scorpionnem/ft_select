@@ -6,7 +6,7 @@
 /*   By: mbatty <mbatty@student.42angouleme.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/28 02:44:15 by mbatty            #+#    #+#             */
-/*   Updated: 2025/10/23 13:01:41 by mbatty           ###   ########.fr       */
+/*   Updated: 2025/10/23 13:14:14 by mbatty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static void	handle_signalcont(int sig)
 	signal(SIGTSTP, handle_signalstp);
 }
 
-void	setup_signals(void)
+static void	setup_signals(void)
 {
 	signal(SIGABRT, handle_signal);
 	signal(SIGINT, handle_signal);

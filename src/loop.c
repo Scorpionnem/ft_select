@@ -6,14 +6,14 @@
 /*   By: mbatty <mbatty@student.42angouleme.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/23 09:07:31 by mbatty            #+#    #+#             */
-/*   Updated: 2025/10/23 09:07:53 by mbatty           ###   ########.fr       */
+/*   Updated: 2025/10/23 13:14:24 by mbatty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ctx.h"
 #include "term_cmds.h"
 
-void	check_input(t_ctx *ctx, t_input input)
+static void	check_input(t_ctx *ctx, t_input input)
 {
 	if (input == FT_KEY_ESCAPE)
 		ctx_stop(ctx);
