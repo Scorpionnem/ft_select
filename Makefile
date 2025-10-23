@@ -16,7 +16,8 @@ SRCS =	src/main.c\
 		src/display.c\
 		src/selection.c\
 		src/ctx_term_manip.c\
-		src/term_cmds2.c
+		src/term_cmds2.c\
+		src/loop.c
 
 OBJDIR = obj
 OBJS = $(SRCS:%.c=$(OBJDIR)/%.o)

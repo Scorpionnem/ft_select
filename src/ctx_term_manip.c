@@ -6,7 +6,7 @@
 /*   By: mbatty <mbatty@student.42angouleme.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 16:49:41 by mbatty            #+#    #+#             */
-/*   Updated: 2025/10/23 08:51:14 by mbatty           ###   ########.fr       */
+/*   Updated: 2025/10/23 09:06:41 by mbatty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,11 @@ int	ctx_init_term(t_ctx *ctx)
 
 	if (isatty(0))
 	{
-		if (!(tty_name = ttyname(0)))
+		tty_name = ttyname(0);
+		if (!tty_name)
 			return (ctx->term_fd = 0);
-		if ((ctx->term_fd = open(tty_name, O_RDWR)) == -1)
+		ctx->term_fd = open(tty_name, O_RDWR);
+		if (ctx->term_fd == -1)
 			return (ctx->term_fd = 0);
 	}
 	termtype = getenv("TERM");
