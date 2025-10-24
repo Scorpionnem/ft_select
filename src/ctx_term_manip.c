@@ -6,7 +6,7 @@
 /*   By: mbatty <mbatty@student.42angouleme.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 16:49:41 by mbatty            #+#    #+#             */
-/*   Updated: 2025/10/23 13:14:51 by mbatty           ###   ########.fr       */
+/*   Updated: 2025/10/24 08:29:24 by mbatty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int	ctx_update(t_ctx *ctx)
 	unsigned int	prev_width;
 	unsigned int	prev_height;
 
-	if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &w) < 0)
+	if (ioctl(ctx->term_fd, TIOCGWINSZ, &w) < 0)
 		return (0);
 	prev_width = ctx->columns_count;
 	prev_height = ctx->lines_count;
