@@ -30,7 +30,7 @@ all: $(LIBFT) $(NAME)
 re: fclean all
 
 $(LIBFT):
-	@make -C ./libft bonus
+	@make -C ./libft bonus --no-print-directory
 
 $(NAME): $(OBJS)
 	@echo Compiling $(NAME)
@@ -42,12 +42,12 @@ $(OBJDIR)/%.o: %.c
 	@$(CC) $(CFLAGS) $(INCLUDES) -MMD -MP -c $< -o $@
 
 clean:
-	@make -C ./libft clean
+	@make -C ./libft clean --no-print-directory
 	@echo Cleaning objects
 	@rm -rf $(OBJDIR)
 
 fclean: clean
-	@make -C ./libft fclean
+	@make -C ./libft fclean --no-print-directory
 	@echo Cleaning $(NAME)
 	@rm -rf $(NAME)
 

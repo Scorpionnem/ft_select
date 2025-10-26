@@ -18,21 +18,25 @@ CC = cc
 CFLAGS = -Wall -Werror -Wextra -g
 
 %.o : %.c
-		$(CC) $(CFLAGS) -o $@ -c $<
+		@echo Compiling $<
+		@$(CC) $(CFLAGS) -o $@ -c $<
 
 all: $(NAME)
 
 $(NAME): $(OBJECTS)
-		ar rcs $(NAME) $(OBJECTS)
+		@echo Compiling $(NAME)
+		@ar rcs $(NAME) $(OBJECTS)
 
 bonus: $(OBJECTSALL)
-		ar rcs $(NAME) $(OBJECTSALL)
+		@echo Compiling $(NAME)
+		@ar rcs $(NAME) $(OBJECTSALL)
 
 clean:
-		rm -f $(OBJECTS) $(OBJECTSALL)
+		@rm -f $(OBJECTS) $(OBJECTSALL)
 
 fclean: clean
-		rm -f $(NAME)
+		@echo Cleaning $(NAME)
+		@rm -f $(NAME)
 
 re: fclean all
 
