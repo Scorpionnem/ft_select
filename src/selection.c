@@ -6,16 +6,11 @@
 /*   By: mbatty <mbatty@student.42angouleme.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 16:47:48 by mbatty            #+#    #+#             */
-/*   Updated: 2025/10/23 13:11:36 by mbatty           ###   ########.fr       */
+/*   Updated: 2025/10/26 09:11:38 by mbatty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ctx.h"
-
-int	items_per_line(t_ctx *ctx)
-{
-	return (ctx->columns_count / ft_strlen(items_biggest(ctx->items)->data));
-}
 
 t_item	*items_biggest(t_item *lst)
 {
@@ -35,6 +30,23 @@ t_item	*items_biggest(t_item *lst)
 	return (biggest);
 }
 
+static bool	has_selected_after(t_item *lst)
+{
+	t_item	*first;
+
+	first = lst;
+	lst = lst->next;
+	while (lst)
+	{
+		if (lst->selected)
+			return (true);
+		lst = lst->next;
+		if (lst == first)
+			break ;
+	}
+	return (false);
+}
+
 void	validate_selection(t_ctx *ctx)
 {
 	t_item	*first;
@@ -45,12 +57,14 @@ void	validate_selection(t_ctx *ctx)
 	lst = ctx->items;
 	first = lst;
 	selected = 0;
-	while (lst != NULL)
+	while (lst)
 	{
 		if (lst->selected)
 		{
+			lst->selected = false;
 			ft_putstr_fd(lst->data, 1);
-			ft_putchar_fd(' ', 1);
+			if (has_selected_after(lst))
+				ft_putchar_fd(' ', 1);
 			selected++;
 		}
 		lst = lst->next;

@@ -6,12 +6,17 @@
 /*   By: mbatty <mbatty@student.42angouleme.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 16:33:55 by mbatty            #+#    #+#             */
-/*   Updated: 2025/10/23 08:38:56 by mbatty           ###   ########.fr       */
+/*   Updated: 2025/10/26 09:11:42 by mbatty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ctx.h"
 #include "term_cmds.h"
+
+int	items_per_line(t_ctx *ctx)
+{
+	return (ctx->columns_count / ft_strlen(items_biggest(ctx->items)->data));
+}
 
 static void	print_item(t_ctx *ctx, t_item *lst, t_item *cursor)
 {
