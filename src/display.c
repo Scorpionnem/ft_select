@@ -6,7 +6,7 @@
 /*   By: mbatty <mbatty@student.42angouleme.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 16:33:55 by mbatty            #+#    #+#             */
-/*   Updated: 2025/10/26 09:11:42 by mbatty           ###   ########.fr       */
+/*   Updated: 2025/10/27 09:24:28 by mbatty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,16 @@
 
 int	items_per_line(t_ctx *ctx)
 {
-	return (ctx->columns_count / ft_strlen(items_biggest(ctx->items)->data));
+	int		length;
+	t_item	*biggest;
+
+	biggest = items_biggest(ctx->items);
+	if (!biggest)
+		return (1);
+	length = ft_strlen(biggest->data);
+	if (length <= 0)
+		length = 1;
+	return (ctx->columns_count / length);
 }
 
 static void	print_item(t_ctx *ctx, t_item *lst, t_item *cursor)
