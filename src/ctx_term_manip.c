@@ -6,7 +6,7 @@
 /*   By: mbatty <mbatty@student.42angouleme.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 16:49:41 by mbatty            #+#    #+#             */
-/*   Updated: 2025/10/24 08:29:24 by mbatty           ###   ########.fr       */
+/*   Updated: 2025/10/29 08:59:47 by mbatty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ int	ctx_get_term_commands(t_ctx *ctx)
 	ctx->cmds.hide_cursor_cmd = tgetstr("vi", NULL);
 	ctx->cmds.show_cursor_cmd = tgetstr("ve", NULL);
 	ctx->cmds.cursor_motion = tgetstr("cm", NULL);
+	ctx->cmds.inverse_video_cmd = tgetstr("so", NULL);
 	return (1);
 }
 

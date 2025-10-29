@@ -6,7 +6,7 @@
 /*   By: mbatty <mbatty@student.42angouleme.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/28 03:26:00 by mbatty            #+#    #+#             */
-/*   Updated: 2025/10/22 16:51:13 by mbatty           ###   ########.fr       */
+/*   Updated: 2025/10/29 09:00:06 by mbatty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,9 @@ int	set_bg_color(t_ctx *ctx, int color)
 	return (1);
 }
 
-int	set_blink(t_ctx *ctx)
+int	set_inverse(t_ctx *ctx)
 {
-	tputs(ctx->cmds.blink_cmd, 1, ft_putchar);
+	tputs(ctx->cmds.inverse_video_cmd, 1, ft_putchar);
 	return (1);
 }
 

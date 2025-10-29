@@ -6,7 +6,7 @@
 /*   By: mbatty <mbatty@student.42angouleme.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/28 03:26:23 by mbatty            #+#    #+#             */
-/*   Updated: 2025/10/22 16:45:39 by mbatty           ###   ########.fr       */
+/*   Updated: 2025/10/29 09:00:19 by mbatty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 int	reset_terminal(t_ctx *ctx);
 int	set_color(t_ctx *ctx, int color);
-int	set_blink(t_ctx *ctx);
+int	set_inverse(t_ctx *ctx);
 int	set_bold(t_ctx *ctx);
 int	set_underline(t_ctx *ctx);
 int	clear_terminal(t_ctx *ctx);

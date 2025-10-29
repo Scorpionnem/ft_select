@@ -6,7 +6,7 @@
 /*   By: mbatty <mbatty@student.42angouleme.fr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/28 02:54:55 by mbatty            #+#    #+#             */
-/*   Updated: 2025/10/23 13:15:50 by mbatty           ###   ########.fr       */
+/*   Updated: 2025/10/29 08:59:24 by mbatty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ typedef struct s_cmds
 	char	*underline_cmd;
 	char	*show_cursor_cmd;
 	char	*hide_cursor_cmd;
+	char	*inverse_video_cmd;
 
 	char	*cursor_motion;
 
